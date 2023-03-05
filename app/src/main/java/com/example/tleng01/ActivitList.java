@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.tleng01.configuracion.SQLiteConexion;
 import com.example.tleng01.configuracion.Transacciones;
@@ -32,6 +35,18 @@ public class ActivitList extends AppCompatActivity
 
         ArrayAdapter adp = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ArregloPersonas);
         listapersonas.setAdapter(adp);
+
+        listapersonas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(),lista.get(i).getCorreo().toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void ObtenerListaPersonas()
@@ -40,7 +55,7 @@ public class ActivitList extends AppCompatActivity
         Personas person = null;
         lista = new ArrayList<Personas>();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM" + Transacciones.tablaperson, null);
+        Cursor cursor = db.rawQuery(" SELECT * FROM " + Transacciones.tablaperson, null);
 
         while(cursor.moveToNext())
         {
@@ -50,7 +65,6 @@ public class ActivitList extends AppCompatActivity
             person.setApellidos(cursor.getString(2));
             person.setEdad(cursor.getInt(3));
             person.setCorreo(cursor.getString(4));
-
             lista.add(person);
         }
         cursor.close();
